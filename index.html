@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <meta http-equiv="Content-Security-Policy">
+        <script type="text/javascript" src="cordova.js"></script>
+        <!-- jQuery -->
+        <link rel="stylesheet" type="text/css" href="js/jquery-1.5.0.mobile.min.css">
+        <script type="text/javascript" src="js/jquery-1.11.1.min.js" id="cordova-jquery"></script>
+        <script type="text/javascript" id="jqm-trans-disable">
+            /* For having a faster transition */
+            $(document).on("mobileinit", function() {
+                            $.mobile.defaultPageTransition = "none";
+                            $.mobile.defaultDialogTransition = "none";
+            });
+        </script>
+        <script type="text/javascript" src="js/jquery-1.5.0.mobile.min.js"></script>        
+        <script type="text/javascript" src="js/index.js"></script>
+        <title>MegaMax Sale</title>
+    </head>
+    <body>
+        <div class="app">
+	   <h1>MegaMax Sale</h1>
+            <div data-role="controlgroup" data-type="horizontal">
+                <li> Salesperson:<input type="text" id="salesId"> </li> <br>
+                Password:<input type="password" id="password"><br>
+                Client ID:<input type="text" id="clientId"><br>
+	    </div>
+            <div data-role="controlgroup" data-type="horizontal">
+                <br><button type=button id="prevWid" onclick="app.megaMaxSale.prevWidget()">Prev Widget</button>
+                <button type=button id="nextWid" onclick="app.megaMaxSale.nextWidget()">Next Widget</button><br>
+                <canvas style="width:75%;height:30%;" id="widgetCanvas"  ></canvas>
+	    </div>
+            <div data-role="controlgroup" data-type="horizontal">
+                Price:<input type="text" id="priceWid" style="width: 40px;">
+                Number:<input type="text" id="numWid" style="width: 40px;">
+                <button type=button id="addToOrder" onclick="app.megaMaxSale.addToOrder()">Add to Order<br>
+	    </div>
+            <div data-role="controlgroup" data-type="horizontal">
+              <!--  <br><button type=button id="displayOrder" onclick="app.megaMaxSale.displayOrder()">Display Order</button><br>  -->
+                <p id="subTotal"></p>
+                <p id="vat"></p>
+                <p id="total"></p>
+                <p id="address"></p>
+                <p id="time"></p>
+                <br><button type=button id="placeOrder" onclick="app.megaMaxSale.placeOrder()">Place Order</button>
+            </div>
+	    <canvas style="width:75%;height:30%;" id="mapCanvas">
+            </canvas>
+        </div>
+    </body>
+</html>
