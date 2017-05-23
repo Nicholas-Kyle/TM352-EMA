@@ -92,6 +92,17 @@ var app = {
                             }
                         });
             }
+            
+            // displays the cost of order, VAT for order and total cost including VAT
+            function displayCost() {
+                var cost = 0.0;
+                $.each(orders, function (i, j) {
+                    cost += (j.number * j.pence_price);
+                });
+                document.getElementById("subtotal").innerHTML = "Subtotal: &pound" + (cost/100);
+                document.getElementById("vat").innerHTML = "VAT: &pound" + (cost/500);
+                document.getElementById("total").innerHTML = "Total: &pound" + (cost*1.2/100);
+            };
 
             // requests the next widget to be loaded
             this.nextWidget = function () {
@@ -137,6 +148,7 @@ var app = {
                     number: document.getElementById("numWid").value,
                     pence_price: document.getElementById("priceWid").value};
                 orders.push(order);
+                displayCost();
             };
         }
         this.megaMaxSale = new MegaMaxSale();
