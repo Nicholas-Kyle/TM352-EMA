@@ -1,46 +1,105 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-var app = {
-    // Application Constructor
-    initialize: function() {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-    },
 
-    // deviceready Event Handler
-    //
-    // Bind any cordova events here. Common events are:
-    // 'pause', 'resume', etc.
-    onDeviceReady: function() {
-        this.receivedEvent('deviceready');
-    },
 
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
+// Returns true if a given string is a letter
+function isLetter(str) {
+    var letter = /^[a-z]+$/;
+    if ((str.match(letter))) {
+        return true;
+    } else {
+        return false;
     }
-};
+}
 
-app.initialize();
+// Returns true if a given string is a number
+function isNumber(str) {
+    var number = /^[0-9]+$/;
+    if ((str.match(number))) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// Returns true if a string starts with a letter and ends with a number
+function validUserFormat(userName) {
+    var value = $('#' + userName).val();
+    return (isLetter(value.charAt(0)) && isNumber(value.charAt(value.length - 1)));
+}
+
+var app = {
+    initialize: function () {
+        this.bindEvents();
+    },
+    bindEvents: function () {
+        function MegaMaxSale() {
+
+            var salesId;
+            var password;
+            var clientId;
+            var nextWid;
+            var prevWid;
+            // checks salesId, password and clientId with current values, 
+            // returns true and sets values to variables if they are different
+            // returns false if they are the same
+            function newCredentials() {
+                if (salesId != document.getElementById("salesId").value
+                        || password != document.getElementById("password").value
+                        || clientId != document.getElementById("clientId").value) {
+                    salesId = document.getElementById("salesId").value;
+                    password = document.getElementById("password").value;
+                    clientId = document.getElementById("clientId").value;
+                    return true;
+                } else {
+                    return false
+                }
+            }
+
+            // STEP 1: checks salesId, password and clientId with current values
+            // if they are different procede STEP 2 else procede to STEP 7
+            // STEP 2: checks salesId is of a valid format
+            // STEP 2.1: stores salesId as variable salesId
+            // STEP 3: stores password as variable password
+            // STEP 4: stores clientId as variable clientId
+            // STEP 5: calls API to return all widgets details
+            // STEP 6: stores all widget IDs in an array and sets nextWid variable to 0
+            // and prevWid to size of array - 2
+            // STEP 7: calls API to return widget details corresponding to nextWidget
+            // STEP 8: displays widget image, description and asking price
+            // STEP 9: increments nextWidget and prevWidget values
+            //             
+
+            this.nextWidget = function () {
+                if (validUserFormat('salesId')) {
+                if (newCredentials()) {
+                    
+                        $.get('http://137.108.93.222/openstack/api/widgets/?OUCU=' + salesId + '&password=' + password,
+                        function (data) {
+                            var obj = $.parseJSON(data);
+                            if (obj.status == "fail") {
+                            alert(obj.data[0].reason);
+                            } else {
+                            $.each(obj.data, function (index, value) {
+
+                            }
+
+                            }
+
+                            // calls API to return all widgets details
+                            // STEP 6: stores all widget IDs in an array and sets nextWid variable to 0
+                            // and prevWid to size of array - 2
+
+
+                            else {
+                            console.log("same");
+                            }
+                        } else {
+                        alert("Sales ID incorrect format")
+                    }
+
+                }
+                ;
+                }
+                this.megaMaxSale = new MegaMaxSale();
+            }
+        };
+        app.initialize();
