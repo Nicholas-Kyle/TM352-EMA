@@ -73,39 +73,36 @@ var app = {
                                 });
                                 nextWid = 0;
                                 prevWid = widArray.length - 2;
-                                console.log(prevWid);
+                                displayNext(nextWid);
                             }
                         });
             }
 
-            // STEP 7: calls API to return widget details corresponding to nextWidget
-            // STEP 8: displays widget image, description and asking price
-            // STEP 9: increments nextWidget and prevWidget values 
+            function displayNext(index) {
+                console.log(index);
+                                        //    when printing info to html!!!!!!
+                        //          document.getElementById("subTotal").innerHTML = "out";
+
+            }
 
             this.nextWidget = function () {
                 if (validUserFormat('salesId')) {
                     if (newCredentials()) {
                         setCredentials();
                         getWidgetIds();
-                        
-                        //    when printing info to html!!!!!!
-                        //          document.getElementById("subTotal").innerHTML = "out";
-
-
-                        // calls API to return all widgets details
-                        // STEP 6: stores all widget IDs in an array and sets nextWid variable to 0
-                        // and prevWid to size of array - 2
-
-
+                    } else {
+                        prevWid = nextWid;
+                        if (nextWid >= (widArray.length - 1)) {
+                            nextWid = 0;
+                        } else {
+                            nextWid++;
+                        }
+                        displayNext(nextWid);
                     }
-                    // why is prevWid not set?
-                    console.log(prevWid);
                 } else {
-                    alert("Sales ID incorrect format")
+                    alert("Sales ID incorrect format");
                 }
-
-            }
-            ;
+            };
         }
         this.megaMaxSale = new MegaMaxSale();
     }
