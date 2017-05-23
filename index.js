@@ -73,16 +73,21 @@ var app = {
                                 });
                                 nextWid = 0;
                                 prevWid = widArray.length - 2;
-                                displayNext(nextWid);
+                                updateWidget(nextWid);
                             }
                         });
             }
 
-            function displayNext(index) {
-                console.log(index);
-                                        //    when printing info to html!!!!!!
-                        //          document.getElementById("subTotal").innerHTML = "out";
-
+            function updateWidget(index) {
+                $.get('http://137.108.93.222/openstack/api/widgets/' + widArray[index] + '?OUCU=' + salesId + '&password=' + password,
+                        function (data) {
+                            var obj = JSON.parse(data);
+                            if (obj.status == "error") {
+                                alert(obj.message);
+                            } else {
+                                document.getElementById("askingPrice").innerHTML = "Asking Price: " + obj.data[0].pence_price;
+                            }
+                                });
             }
 
             this.nextWidget = function () {
@@ -97,7 +102,7 @@ var app = {
                         } else {
                             nextWid++;
                         }
-                        displayNext(nextWid);
+                        updateWidget(nextWid);
                     }
                 } else {
                     alert("Sales ID incorrect format");
