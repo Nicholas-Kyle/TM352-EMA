@@ -85,9 +85,11 @@ var app = {
                             if (obj.status == "error") {
                                 alert(obj.message);
                             } else {
+                                document.getElementById("image").src = obj.data[0].url;
+                                document.getElementById("description").innerHTML = "Description: " + obj.data[0].description;
                                 document.getElementById("askingPrice").innerHTML = "Asking Price: " + obj.data[0].pence_price;
                             }
-                                });
+                        });
             }
 
             this.nextWidget = function () {

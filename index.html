@@ -24,17 +24,19 @@
         <div class="app">
 	   <h1>MegaMax Sale</h1>
             <div data-role="controlgroup" data-type="horizontal">
-                <li> Salesperson:<input type="text" id="salesId"> </li> <br>
-                Password:<input type="password" id="password"><br>
-                Client ID:<input type="text" id="clientId"><br>
+                Salesperson:<input type="text" id="salesId">
+                Password:<input type="password" id="password">
+                Client ID:<input type="text" id="clientId">
 	    </div>
             <div data-role="controlgroup" data-type="horizontal">
                 <br><button type=button id="prevWid" onclick="app.megaMaxSale.prevWidget()">Prev Widget</button>
                 <button type=button id="nextWid" onclick="app.megaMaxSale.nextWidget()">Next Widget</button><br>
-                <canvas style="width:75%;height:30%;" id="widgetCanvas"  ></canvas>
+                <img id="image" width="160" height="160">
 	    </div>
             <div data-role="controlgroup" data-type="horizontal">
-                Price:<input type="text" id="priceWid" style="width: 40px;">
+                <p id="description"></p>
+                <p id="askingPrice"></p>
+                Discount Price:<input type="text" id="priceWid" style="width: 40px;">
                 Number:<input type="text" id="numWid" style="width: 40px;">
                 <button type=button id="addToOrder" onclick="app.megaMaxSale.addToOrder()">Add to Order<br>
 	    </div>
