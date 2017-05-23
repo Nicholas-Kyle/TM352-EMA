@@ -71,18 +71,23 @@ var app = {
             this.nextWidget = function () {
                 if (validUserFormat('salesId')) {
                 if (newCredentials()) {
-                    
-                        $.get('http://137.108.93.222/openstack/api/widgets/?OUCU=' + salesId + '&password=' + password,
+                    //get data, create and array of widget ids
+                    $.get('http://137.108.93.222/openstack/api/widgets/?OUCU=' + salesId + '&password=' + password,
                         function (data) {
-                            var obj = $.parseJSON(data);
-                            if (obj.status == "fail") {
-                            alert(obj.data[0].reason);
-                            } else {
-                            $.each(obj.data, function (index, value) {
+                            alert( "Data Loaded: " + data );
+                        });
+                }
+                    
+                        
+                        //    var obj = $.parseJSON(data);
+                        //    if (obj.status == "fail") {
+                        //    alert(obj.data[0].reason);
+                        //    } else {
+                        //    $.each(obj.data, function (index, value) {
 
-                            }
+                            
 
-                            }
+                            
 
                             // calls API to return all widgets details
                             // STEP 6: stores all widget IDs in an array and sets nextWid variable to 0
