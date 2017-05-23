@@ -35,9 +35,9 @@ var app = {
             var salesId;
             var password;
             var clientId;
-            var nextWid;
-            var prevWid;
+            var currentWid;
             var widArray = [];
+            var orders = [];
 
             // checks salesId, password and clientId with current values, 
             // returns true if they are different
@@ -52,11 +52,12 @@ var app = {
                 }
             }
 
-            // sets salesId, password and clientId with current values
+            // sets salesId, password and clientId with current values and clears orders
             function setCredentials() {
                 salesId = document.getElementById("salesId").value;
                 password = document.getElementById("password").value;
                 clientId = document.getElementById("clientId").value;
+                orders = [];
             }
 
             // gets widget objects and adds widget ids to widArray
@@ -71,13 +72,13 @@ var app = {
                                 $.each(obj.data, function (i, widObj) {
                                     widArray.push(widObj.id);
                                 });
-                                nextWid = 0;
-                                prevWid = widArray.length - 2;
-                                updateWidget(nextWid);
+                                currentWid = 0;
+                                updateWidget(currentWid);
                             }
                         });
             }
 
+            // updates the asking price, description and widget image
             function updateWidget(index) {
                 $.get('http://137.108.93.222/openstack/api/widgets/' + widArray[index] + '?OUCU=' + salesId + '&password=' + password,
                         function (data) {
@@ -92,23 +93,50 @@ var app = {
                         });
             }
 
+            // requests the next widget to be loaded
             this.nextWidget = function () {
                 if (validUserFormat('salesId')) {
                     if (newCredentials()) {
                         setCredentials();
                         getWidgetIds();
                     } else {
-                        prevWid = nextWid;
-                        if (nextWid >= (widArray.length - 1)) {
-                            nextWid = 0;
+                        if (currentWid >= (widArray.length - 1)) {
+                            currentWid = 0;
                         } else {
-                            nextWid++;
+                            currentWid++;
                         }
-                        updateWidget(nextWid);
+                        updateWidget(currentWid);
                     }
                 } else {
                     alert("Sales ID incorrect format");
                 }
+            };
+            
+            // requests the previous widget to be loaded
+            this.prevWidget = function () {
+                if (validUserFormat('salesId')) {
+                    if (newCredentials()) {
+                        setCredentials();
+                        getWidgetIds();
+                    } else {
+                        if (currentWid == 0) {
+                            currentWid = widArray.length - 1;
+                        } else {
+                            currentWid--;
+                        }
+                        updateWidget(currentWid);
+                    }
+                } else {
+                    alert("Sales ID incorrect format");
+                }
+            };
+            
+            // updates order details locally
+            this.addToOrder = function () {
+                var order = {widget_id: widArray[currentWid], 
+                    number: document.getElementById("numWid").value,
+                    pence_price: document.getElementById("priceWid").value};
+                orders.push(order);
             };
         }
         this.megaMaxSale = new MegaMaxSale();
