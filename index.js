@@ -92,17 +92,42 @@ var app = {
                             }
                         });
             }
-            
+
             // displays the cost of order, VAT for order and total cost including VAT
             function displayCost() {
                 var cost = 0.0;
                 $.each(orders, function (i, j) {
                     cost += (j.number * j.pence_price);
                 });
-                document.getElementById("subtotal").innerHTML = "Subtotal: &pound" + (cost/100);
-                document.getElementById("vat").innerHTML = "VAT: &pound" + (cost/500);
-                document.getElementById("total").innerHTML = "Total: &pound" + (cost*1.2/100);
-            };
+                document.getElementById("subtotal").innerHTML = "Subtotal: &pound" + (cost / 100);
+                document.getElementById("vat").innerHTML = "VAT: &pound" + (cost / 500);
+                document.getElementById("total").innerHTML = "Total: &pound" + (cost * 1.2 / 100);
+            }
+            ;
+
+            // returns the latitude and longditude for specified client id
+            function clientLatLong(id) {
+                //TODO call client API to get address
+                setTimeout(function () {
+                    //TODO call openstreetmap API to get lat long
+                }
+                , 1000);
+            }
+
+            // loads map to current location
+            function loadMap() {
+                var onSuccess = function (position) {
+                    var div = document.getElementById("mapCanvas");
+                    var map = plugin.google.maps.Map.getMap(div);
+                    var currentLocation = {"lat": (position.coords.latitude), "lng": (position.coords.longitude)};
+                    //alert(position.coords.latitude);
+                    map.setCenter(currentLocation);
+                };
+                function onError(error) {
+                    alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+                }
+                navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            }
 
             // requests the next widget to be loaded
             this.nextWidget = function () {
@@ -110,6 +135,7 @@ var app = {
                     if (newCredentials()) {
                         setCredentials();
                         getWidgetIds();
+                        loadMap();
                     } else {
                         if (currentWid >= (widArray.length - 1)) {
                             currentWid = 0;
@@ -122,13 +148,14 @@ var app = {
                     alert("Sales ID incorrect format");
                 }
             };
-            
+
             // requests the previous widget to be loaded
             this.prevWidget = function () {
                 if (validUserFormat('salesId')) {
                     if (newCredentials()) {
                         setCredentials();
                         getWidgetIds();
+                        loadMap();
                     } else {
                         if (currentWid == 0) {
                             currentWid = widArray.length - 1;
@@ -141,10 +168,10 @@ var app = {
                     alert("Sales ID incorrect format");
                 }
             };
-            
+
             // updates order details locally
             this.addToOrder = function () {
-                var order = {widget_id: widArray[currentWid], 
+                var order = {widget_id: widArray[currentWid],
                     number: document.getElementById("numWid").value,
                     pence_price: document.getElementById("priceWid").value};
                 orders.push(order);
