@@ -38,7 +38,6 @@ var app = {
             var currentWid;
             var widArray = [];
             var orders = [];
-
             // checks salesId, password and clientId with current values, 
             // returns true if they are different
             // returns false if they are the same
@@ -104,8 +103,7 @@ var app = {
                 document.getElementById("total").innerHTML = "Total: &pound" + (cost * 1.2 / 100);
             }
             ;
-
-            // returns the latitude and longditude for specified client id
+            // returns the latitude and longitude for specified client id
             function clientLatLong(id) {
                 //TODO call client API to get address
                 setTimeout(function () {
@@ -119,14 +117,23 @@ var app = {
                 var onSuccess = function (position) {
                     var div = document.getElementById("mapCanvas");
                     var map = plugin.google.maps.Map.getMap(div);
-                    var currentLocation = {"lat": (position.coords.latitude), "lng": (position.coords.longitude)};
-                    //alert(position.coords.latitude);
+                    // issues with callback, lat lng variables not needed they were a temporary fix (that didnt' work)
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+                    var currentLocation = {"lat": lat, "lng": lng};
                     map.setCenter(currentLocation);
+                    map.setZoom(55);
+                    map.refreshLayout();
                 };
                 function onError(error) {
                     alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
                 }
                 navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            }
+
+            // displays markers on map
+            function displayMarkers() {
+                //TODO
             }
 
             // requests the next widget to be loaded
@@ -177,6 +184,47 @@ var app = {
                 orders.push(order);
                 displayCost();
             };
+
+            // creates a new order, adds order items to it, requests markers to be displayed
+            // on map for order locations for current day
+            this.placeOrder = function () {
+            // TODO create order
+            $.post("http://137.108.93.222/openstack/api/orders",
+                    {
+                        OUCU: "nk3826",
+                        password: "ZJXHRplO",
+                        client_id: 1,
+                        latitude: 89,
+                        longitude: -20
+                    }, function (data)
+
+            {
+                alert("Place New Order = " + data.data[0].id);//data[0].id);
+                //if (obj.status == "success")
+
+                //{
+
+                //    alert('New Order Placed successfully.');
+                //} else
+
+                //{
+
+                //    alert("New Order failed");
+                //}
+
+            }, "json"
+
+// Comment - End bracket of third $.post paramter
+
+            );
+// Comment - End round bracket of all $.post parameters
+
+
+// Comment - End bracket of placeNewOrder function
+            // TODO add orders
+
+        }
+        ;
         }
         this.megaMaxSale = new MegaMaxSale();
     }
