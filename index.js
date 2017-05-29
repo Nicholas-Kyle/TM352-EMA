@@ -104,10 +104,15 @@ var app = {
             }
             ;
             // returns the latitude and longitude for specified client id
-            function clientLatLong(id) {
+            function clientLatLong(address) {
                 //TODO call client API to get address
                 setTimeout(function () {
-                    //TODO call openstreetmap API to get lat long
+                    //var address = getAddress;
+                    console.log(address);
+                    $.get("http://nominatim.openstreetmap.org/search/" + address + "?format=json&countrycodes=gb",
+                            function (data) {
+                                console.log(data);
+                            });
                 }
                 , 1000);
             }
@@ -134,6 +139,46 @@ var app = {
             // displays markers on map
             function displayMarkers() {
                 //TODO
+            }
+
+            // creates a new order
+            function createOrder() {
+                $.post("http://137.108.93.222/openstack/api/orders",
+                        {
+                            OUCU: "nk3826", // change to salesId
+                            password: "ZJXHRplO", // change to password
+                            client_id: 1, // change to clientId
+                            latitude: 89, // change to lat from api
+                            longitude: -20 // change to lng from api
+                        }, function (data)
+                {
+                    alert("Place New Order = " + data.data[0].id);
+                    //if (obj.status == "success")
+
+                    //{
+
+                    //    alert('New Order Placed successfully.');
+                    //} else
+
+                    //{
+
+                    //    alert("New Order failed");
+
+                }, "json");
+            }
+
+            // returns address for specified client id
+            function getAddress() {
+                $.get("http://137.108.93.222/openstack/api/clients/" + clientId + "?OUCU=" + salesId + "&password=" + password,
+                        function (data) {
+                            if (data.status == "success") {
+                                return (data.data[0].address);
+                                console.log(" gA " + data.data[0].address);
+                            } else {
+                                alert("Error: " + data.status);
+                            }
+                        }, "json");
+                        
             }
 
             // requests the next widget to be loaded
@@ -188,43 +233,16 @@ var app = {
             // creates a new order, adds order items to it, requests markers to be displayed
             // on map for order locations for current day
             this.placeOrder = function () {
-            // TODO create order
-            $.post("http://137.108.93.222/openstack/api/orders",
-                    {
-                        OUCU: "nk3826",
-                        password: "ZJXHRplO",
-                        client_id: 1,
-                        latitude: 89,
-                        longitude: -20
-                    }, function (data)
+                var address = getAddress();
+                clientLatLong(address);
+                // get client address
+                // get lat lng
+                // TODO create order
+                // add items to order
+                // display markers on map
 
-            {
-                alert("Place New Order = " + data.data[0].id);//data[0].id);
-                //if (obj.status == "success")
+            };
 
-                //{
-
-                //    alert('New Order Placed successfully.');
-                //} else
-
-                //{
-
-                //    alert("New Order failed");
-                //}
-
-            }, "json"
-
-// Comment - End bracket of third $.post paramter
-
-            );
-// Comment - End round bracket of all $.post parameters
-
-
-// Comment - End bracket of placeNewOrder function
-            // TODO add orders
-
-        }
-        ;
         }
         this.megaMaxSale = new MegaMaxSale();
     }
