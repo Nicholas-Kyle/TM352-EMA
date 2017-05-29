@@ -101,17 +101,15 @@ var app = {
                 document.getElementById("subtotal").innerHTML = "Subtotal: &pound" + (cost / 100);
                 document.getElementById("vat").innerHTML = "VAT: &pound" + (cost / 500);
                 document.getElementById("total").innerHTML = "Total: &pound" + (cost * 1.2 / 100);
-            }
-            ;
+            };
+            
             // returns the latitude and longitude for specified client id
             function clientLatLong(address) {
                 //TODO call client API to get address
                 setTimeout(function () {
-                    //var address = getAddress;
-                    console.log(address);
                     $.get("http://nominatim.openstreetmap.org/search/" + address + "?format=json&countrycodes=gb",
                             function (data) {
-                                console.log(data);
+                                createOrder(data[0].lat, data[0].lon);
                             });
                 }
                 , 1000);
@@ -142,38 +140,43 @@ var app = {
             }
 
             // creates a new order
-            function createOrder() {
+            function createOrder(lat, lng) {
                 $.post("http://137.108.93.222/openstack/api/orders",
                         {
-                            OUCU: "nk3826", // change to salesId
-                            password: "ZJXHRplO", // change to password
-                            client_id: 1, // change to clientId
-                            latitude: 89, // change to lat from api
-                            longitude: -20 // change to lng from api
+                            OUCU: salesId,
+                            password: password,
+                            client_id: clientId,
+                            latitude: lat,
+                            longitude: lng
                         }, function (data)
                 {
-                    alert("Place New Order = " + data.data[0].id);
-                    //if (obj.status == "success")
-
-                    //{
-
-                    //    alert('New Order Placed successfully.');
-                    //} else
-
-                    //{
-
-                    //    alert("New Order failed");
-
+                    addOrderItems(data.data[0].id);
                 }, "json");
             }
+            
+            function addOrderItems(orderId) {
+                $.each(orders, function (i, j) {
+                $.post("http://137.108.93.222/openstack/api/order_items",
+                        {
+                            OUCU: salesId,
+                            password: password,
+                            order_id: orderId,
+                            widget_id: j.widget_id,
+                            number: j.number,
+                            pence_price: j.pence_price
+                        }, function (data)
+                {
+                    console.log(data);
+                }, "json");
+            });
+        }
 
             // returns address for specified client id
             function getAddress() {
                 $.get("http://137.108.93.222/openstack/api/clients/" + clientId + "?OUCU=" + salesId + "&password=" + password,
                         function (data) {
                             if (data.status == "success") {
-                                return (data.data[0].address);
-                                console.log(" gA " + data.data[0].address);
+                                clientLatLong(data.data[0].address);
                             } else {
                                 alert("Error: " + data.status);
                             }
@@ -233,13 +236,9 @@ var app = {
             // creates a new order, adds order items to it, requests markers to be displayed
             // on map for order locations for current day
             this.placeOrder = function () {
-                var address = getAddress();
-                clientLatLong(address);
-                // get client address
-                // get lat lng
-                // TODO create order
+                getAddress();
                 // add items to order
-                // display markers on map
+                // display markers on map for current day
 
             };
 
